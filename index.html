@@ -379,6 +379,183 @@
         </div>
     </section>
 
+    <!-- Interactive Bulk Quote Configurator Section -->
+    <section class="configurator-section" id="configurator">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Interactive Quote</span>
+                <h2 class="section-title">Bulk Export <span class="gradient-text">Quote Configurator</span></h2>
+                <div class="section-divider"></div>
+                <p class="section-subtitle">Configure your custom order parameters and get an instant professional inquiry summary ready for our export desk.</p>
+            </div>
+
+            <div class="configurator-card" data-aos="fade-up" data-aos-delay="100">
+                <!-- Progress Tracker -->
+                <div class="configurator-progress">
+                    <div class="progress-track"></div>
+                    <div class="progress-fill" id="progressFill"></div>
+                    <div class="progress-step active" data-step="1">1</div>
+                    <div class="progress-step" data-step="2">2</div>
+                    <div class="progress-step" data-step="3">3</div>
+                    <div class="progress-step" data-step="4">4</div>
+                </div>
+
+                <form id="quoteConfigForm" onsubmit="event.preventDefault();">
+                    <!-- STEP 1: Select Category -->
+                    <div class="configurator-step active" id="step-1">
+                        <div class="step-header">
+                            <h3>Step 1: Select Product Category</h3>
+                            <p>Are you looking for premium spices or industrial metal scrap?</p>
+                        </div>
+                        <div class="option-grid">
+                            <div class="option-card" data-value="spices" onclick="selectCategory('spices')">
+                                <div class="card-icon"><i class="fas fa-pepper-hot"></i></div>
+                                <h4>Premium Spices</h4>
+                                <p>100% Pure, Organic, and certified Indian spices</p>
+                                <div class="select-indicator"><i class="fas fa-check"></i></div>
+                            </div>
+                            <div class="option-card" data-value="metal" onclick="selectCategory('metal')">
+                                <div class="card-icon"><i class="fas fa-recycle"></i></div>
+                                <h4>Metal Scrap</h4>
+                                <p>High-purity Copper, Aluminium, and Brass recycling materials</p>
+                                <div class="select-indicator"><i class="fas fa-check"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: Select Specific Items -->
+                    <div class="configurator-step" id="step-2">
+                        <div class="step-header">
+                            <h3>Step 2: Choose Products & Grades</h3>
+                            <p>Select the specific items you want to import. You can select multiple items.</p>
+                        </div>
+                        
+                        <!-- Dynamic item grids loaded via JS based on Category selection -->
+                        <div class="option-grid" id="itemsGrid">
+                            <!-- JS will inject options here -->
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: Quantity, Packaging & Purity -->
+                    <div class="configurator-step" id="step-3">
+                        <div class="step-header">
+                            <h3>Step 3: Define Target Volume</h3>
+                            <p>Specify your estimated target volume for shipment (Metric Tons).</p>
+                        </div>
+
+                        <div class="qty-container">
+                            <label for="qtyInput" style="font-weight: 600; display: block; text-align: center; margin-bottom: 0.5rem; color: var(--dark);">Target Volume</label>
+                            <div class="qty-control">
+                                <div class="qty-input-wrapper">
+                                    <input type="number" id="qtyInput" class="qty-input" min="1" max="1000" value="10">
+                                    <span class="qty-unit">MT</span>
+                                </div>
+                            </div>
+                            <input type="range" id="qtySlider" class="qty-slider" min="1" max="500" value="10">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-light); margin-top: 0.5rem;">
+                                <span>1 MT (Min)</span>
+                                <span>250 MT</span>
+                                <span>500+ MT</span>
+                            </div>
+                        </div>
+
+                        <!-- Special Packaging preferences / Quality standards -->
+                        <div class="form-grid" style="max-width: 600px; margin: 0 auto;">
+                            <div class="input-field-group">
+                                <label for="packagingPref">Preferred Packaging</label>
+                                <select id="packagingPref" class="input-style">
+                                    <option value="Standard Export Bagging">Standard Export Bagging (25kg/50kg)</option>
+                                    <option value="Premium Jute Bags">Premium Jute / Gunny Bags</option>
+                                    <option value="Bulk Bags">Bulk / Container Bags</option>
+                                    <option value="Custom Branded Packaging">Custom Branded / Retail Packaging</option>
+                                </select>
+                            </div>
+                            <div class="input-field-group">
+                                <label for="deliveryTerms">Delivery Terms (INCOTERMS)</label>
+                                <select id="deliveryTerms" class="input-style">
+                                    <option value="FOB (Free On Board)">FOB - Free On Board</option>
+                                    <option value="CIF (Cost, Insurance & Freight)">CIF - Cost, Insurance & Freight</option>
+                                    <option value="CFR (Cost & Freight)">CFR - Cost & Freight</option>
+                                    <option value="EXW (Ex Works)">EXW - Ex Works</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 4: Contact & Verification Summary -->
+                    <div class="configurator-step" id="step-4">
+                        <div class="step-header">
+                            <h3>Step 4: Contact Details & Inquiry Summary</h3>
+                            <p>Review your custom export configuration and enter your details to generate your official inquiry.</p>
+                        </div>
+
+                        <div class="summary-container">
+                            <div class="summary-header">
+                                <h4>Inquiry Specification Sheet</h4>
+                                <span class="summary-badge" id="summaryCategoryBadge">Spices</span>
+                            </div>
+                            <div class="summary-details">
+                                <div class="summary-row">
+                                    <span class="summary-label">Selected Products</span>
+                                    <span class="summary-val" id="summaryProductsList">-</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="summary-label">Target Quantity</span>
+                                    <span class="summary-val" id="summaryQty">-</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="summary-label">Packaging Choice</span>
+                                    <span class="summary-val" id="summaryPackaging">-</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="summary-label">Delivery Terms</span>
+                                    <span class="summary-val" id="summaryDelivery">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Fields -->
+                        <div class="form-grid" style="max-width: 650px; margin: 0 auto;">
+                            <div class="input-field-group">
+                                <label for="buyerName">Your Name / Company Name *</label>
+                                <input type="text" id="buyerName" class="input-style" placeholder="e.g., Global Foods Inc." required>
+                            </div>
+                            <div class="input-field-group">
+                                <label for="buyerEmail">Email Address *</label>
+                                <input type="email" id="buyerEmail" class="input-style" placeholder="buyer@example.com" required>
+                            </div>
+                            <div class="input-field-group">
+                                <label for="buyerPhone">Phone Number / WhatsApp *</label>
+                                <input type="tel" id="buyerPhone" class="input-style" placeholder="+1 (555) 000-0000" required>
+                            </div>
+                            <div class="input-field-group">
+                                <label for="buyerCountry">Destination Country *</label>
+                                <input type="text" id="buyerCountry" class="input-style" placeholder="e.g., United States" required>
+                            </div>
+                            <div class="input-field-group textarea-style">
+                                <label for="buyerNotes">Additional Quality Specs / Custom Requirements</label>
+                                <textarea id="buyerNotes" class="input-style textarea-style" placeholder="e.g., Curcumin content > 5%, phytosanitary certification needed, or specific ISRI specifications for metal scrap..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Action Buttons -->
+                    <div class="configurator-actions">
+                        <button type="button" class="btn btn-outline-primary" id="btnPrev" style="display: none;" onclick="navigateStep(-1)">
+                            <i class="fas fa-arrow-left"></i> <span>Back</span>
+                        </button>
+                        <button type="button" class="btn btn-primary" id="btnNext" onclick="navigateStep(1)">
+                            <span>Continue</span> <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button type="button" class="btn btn-success" id="btnSubmit" style="display: none;" onclick="submitInquiry()">
+                            <i class="fab fa-whatsapp"></i> <span>Send via WhatsApp</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="cta-section">
         <div class="cta-overlay"></div>
